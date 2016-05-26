@@ -4,14 +4,14 @@
 [![Coverage Status](https://img.shields.io/coveralls/analog-nico/stealthy-require.svg?style=flat-square)](https://coveralls.io/r/analog-nico/stealthy-require)
 [![Dependency Status](https://img.shields.io/david/analog-nico/stealthy-require.svg?style=flat-square)](https://david-dm.org/analog-nico/stealthy-require)
 
-This is probably the closest you can get currently to require something in node.js with completely bypassing the require cache.
+This is probably the closest you can currently get to require something in node.js with completely bypassing the require cache.
 
 The restrictions are:
 
 - [Native modules cannot be required twice.](https://github.com/nodejs/node/issues/5016) Thus this module bypasses the require cache only for non-native (e.g. JS) modules.
-- The require cache is only bypassed for all operations that happen synchronously when a module is required. If a module lazy loads another module at a later time this require call will not bypass the cache anymore.
+- The require cache is only bypassed for all operations that happen synchronously when a module is required. If a module lazy loads another module at a later time that require call will not bypass the cache anymore.
 
-This means you should have a close look at all require calls before you decide to use this library.
+This means you should have a close look at all internal require calls before you decide to use this library.
 
 ## Installation
 
@@ -25,21 +25,21 @@ npm install stealthy-require --save
 
 ## Usage
 
-Let's say you want to do bypass the require cache for this require call:
+Let's say you want to bypass the require cache for this require call:
 
 ``` js
 var request = require('request');
 ```
 
-With Stealthy-Require you can do that like this:
+With `stealthy-require` you can do that like this:
 
-```
+``` js
 var stealthyRequire = require('stealthy-require')(require);
 
 var requestFresh = stealthyRequire('request');
 ```
 
-The require cache is bypassed for the module you require as well as all modules the module requires.
+The require cache is bypassed for the module you require (i.e. `request`) as well as all modules the module requires (i.e. `http` and many more).
 
 ## Contributing
 
