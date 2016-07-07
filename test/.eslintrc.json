@@ -1,5 +1,4 @@
 {
-  "extends": "../../.eslintrc.json",
   "env": {
     "mocha": true
   },
@@ -7,10 +6,6 @@
     "expect": true
   },
   "rules": {
-
-    // Best Practices
-
-    "no-magic-numbers": 0,
 
     // Node.js and CommonJS
 
