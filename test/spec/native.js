@@ -1,6 +1,6 @@
 'use strict';
 
-var stealthyRequire = require('../../lib/index.js')(require);
+var stealthyRequire = require('../../');
 
 
 describe('When native modules are involved, Stealthy-Require', function () {
@@ -11,7 +11,9 @@ describe('When native modules are involved, Stealthy-Require', function () {
 
         var req2 = null;
         expect(function () {
-            req2 = stealthyRequire('../fixtures/native-deps.js');
+            req2 = stealthyRequire(require.cache, function () {
+                return require('../fixtures/native-deps.js');
+            });
         }).not.to.throw(/* Error: Module did not self-register. */);
 
         var req3 = require('../fixtures/native-deps.js');

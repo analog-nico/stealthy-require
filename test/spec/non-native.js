@@ -1,6 +1,6 @@
 'use strict';
 
-var stealthyRequire = require('../../lib/index.js')(require);
+var stealthyRequire = require('../../');
 
 
 describe('When only non-native modules are involved, Stealthy-Require', function () {
@@ -8,7 +8,9 @@ describe('When only non-native modules are involved, Stealthy-Require', function
     it('should require a module without deps', function () {
 
         var req1 = require('../fixtures/no-deps.js');
-        var req2 = stealthyRequire('../fixtures/no-deps.js');
+        var req2 = stealthyRequire(require.cache, function () {
+            return require('../fixtures/no-deps.js');
+        });
         var req3 = require('../fixtures/no-deps.js');
 
         expect(req1).to.eql(req3);
@@ -19,7 +21,9 @@ describe('When only non-native modules are involved, Stealthy-Require', function
     it('should require a module with sync deps', function () {
 
         var req1 = require('../fixtures/sync-deps.js');
-        var req2 = stealthyRequire('../fixtures/sync-deps.js');
+        var req2 = stealthyRequire(require.cache, function () {
+            return require('../fixtures/sync-deps.js');
+        });
         var req3 = require('../fixtures/sync-deps.js');
 
         expect(req1).to.eql(req3);
@@ -30,7 +34,9 @@ describe('When only non-native modules are involved, Stealthy-Require', function
     it('should require a module with the exception of async deps', function () {
 
         var req1 = require('../fixtures/async-deps.js');
-        var req2 = stealthyRequire('../fixtures/async-deps.js');
+        var req2 = stealthyRequire(require.cache, function () {
+            return require('../fixtures/async-deps.js');
+        });
         var req3 = require('../fixtures/async-deps.js');
 
         expect(req1).to.eql(req3);

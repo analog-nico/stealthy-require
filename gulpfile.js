@@ -94,10 +94,14 @@ gulp.task('test-without-coverage', function () {
 
 });
 
-gulp.task('clean', ['clean-coverage']);
+gulp.task('clean', ['clean-coverage', 'clean-results']);
 
 gulp.task('clean-coverage', function (done) {
     rimraf('./coverage', done);
+});
+
+gulp.task('clean-results', function (done) {
+    rimraf('./test/results', done);
 });
 
 gulp.task('ci', function (done) {
