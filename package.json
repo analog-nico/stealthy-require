@@ -11,7 +11,10 @@
   ],
   "main": "./lib/index.js",
   "scripts": {
-    "test": "./node_modules/.bin/gulp ci"
+    "test": "./node_modules/.bin/gulp ci",
+    "test-publish": "./node_modules/.bin/gulp ci-no-cov",
+    "publish-please": "publish-please",
+    "prepublish": "publish-please guard"
   },
   "repository": {
     "type": "git",
@@ -38,6 +41,7 @@
     "gulp-istanbul": "~1.0.0",
     "gulp-mocha": "~2.2.0",
     "mkdirp": "~0.5.1",
+    "publish-please": "~2.1.4",
     "rimraf": "~2.5.3",
     "run-sequence": "~1.2.2",
     "webpack": "~1.13.1"

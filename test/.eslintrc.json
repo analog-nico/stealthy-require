@@ -9,6 +9,7 @@
 
     // Node.js and CommonJS
 
+    "no-process-env": 0,
     "no-sync": 0
 
   }
