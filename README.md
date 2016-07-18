@@ -34,12 +34,26 @@ var request = require('request');
 With `stealthy-require` you can do that like this:
 
 ``` js
-var stealthyRequire = require('stealthy-require')(require);
+var stealthyRequire = require('stealthy-require');
 
-var requestFresh = stealthyRequire('request');
+var requestFresh = stealthyRequire(require.cache, function () {
+    return require('request');
+});
 ```
 
 The require cache is bypassed for the module you require (i.e. `request`) as well as all modules the module requires (i.e. `http` and many more).
+
+## Usage with Module Bundlers
+
+- [Webpack](https://webpack.github.io) works out-of-the-box like described in the [Usage section](#usage) above.
+- [Browserify](http://browserify.org) does not expose `require.cache`. However, as of `browserify@13.0.1` the cache is passed as the 6th argument to CommonJS modules. Thus you can pass this argument instead:
+
+``` js
+// Tweak for Browserify - using arguments[5] instead of require.cache
+var requestFresh = stealthyRequire(arguments[5], function () {
+    return require('request');
+});
+```
 
 ## Contributing
 
@@ -57,6 +71,9 @@ If you want to debug a test you should use `gulp test-without-coverage` to run a
 
 ## Change History
 
+- v1.0.0 (2016-07-18)
+    - **Breaking Change:** API completely changed. Please read the [Usage section](#usage) again.
+    - Redesigned library to support module bundlers like [Webpack](https://webpack.github.io) and [Browserify](http://browserify.org)
 - v0.1.0 (2016-05-26)
     - Initial version
 
