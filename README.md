@@ -6,6 +6,12 @@
 
 This is probably the closest you can currently get to require something in node.js with completely bypassing the require cache.
 
+`stealthy-require` works like this:
+
+1. It clears the require cache.
+2. It calls a callback in which you require your module(s) without the cache kicking in.
+3. It clears the cache again and restores its old state.
+
 The restrictions are:
 
 - [Native modules cannot be required twice.](https://github.com/nodejs/node/issues/5016) Thus this module bypasses the require cache only for non-native (e.g. JS) modules.
@@ -53,6 +59,42 @@ The require cache is bypassed for the module you require (i.e. `request`) as wel
 var requestFresh = stealthyRequire(arguments[5], function () {
     return require('request');
 });
+```
+
+## Technical Walkthrough
+
+``` js
+// 1. Load stealthy-require
+var stealthyRequire = require('stealthy-require');
+// This does nothing but loading the code.
+// It has no side-effects like patching the module loader or anything.
+
+// Any regular require works as always.
+var request1 = require('request');
+
+// 2. Call stealthyRequire with passing the require cache and a callback.
+var requestFresh = stealthyRequire(require.cache, function () {
+
+    // 2a. Before this callback gets called the require cache is cleared.
+
+	// 2b. Any require taking place here takes place on a clean require cache.
+	// Since the require call is part of the user's code it also works with module bundlers.
+    return require('request');
+	// Anything returned here will be returned by stealthyRequire(...).
+
+	// 2c. After this callback gets called the require cache is
+	// - cleared again and
+	// - restored to its old state before step 2.
+
+});
+
+// Any regular require again works as always.
+// In this case require returns the cached request module instance.
+var request2 = require('request');
+
+// And voilà:
+request1 === request2 // -> true
+request1 === requestFresh // -> false
 ```
 
 ## Contributing
