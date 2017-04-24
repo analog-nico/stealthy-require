@@ -61,6 +61,49 @@ var requestFresh = stealthyRequire(arguments[5], function () {
 });
 ```
 
+## Preventing a Memory Leak When Repeatedly Requiring Fresh Module Instances in Node.js
+
+If you are using `stealthy-require` in node.js and repeatedly require fresh module instances the `module.children` array will hold all module instances which prevents unneeded instances to be garbage collected.
+
+Assume your code calls `doSomething()` repeatedly.
+
+``` js
+var stealthyRequire = require('stealthy-require');
+
+function doSomething() {
+
+    var freshInstance = stealthyRequire(require.cache, function () {
+        return require('some-module');
+    });
+    
+    return freshInstance.calc();
+
+}
+```
+
+After `doSomething()` returns `freshInstance` is not used anymore but won’t be garbage collected because `module.children` still holds a reference. The solution is to truncate `module.children` accordingly:
+
+``` js
+var stealthyRequire = require('stealthy-require');
+
+function doSomething() {
+
+    var lengthChildren = module.children.length;
+
+    var freshInstance = stealthyRequire(require.cache, function () {
+        return require('some-module');
+    });
+
+    module.children = module.children.slice(0, lengthChildren)
+
+    return freshInstance.calc();
+
+}
+```
+
+The `slice` operation removes all new `module.children` entries created during the `stealthyRequire(...)` call and thus `freshInstance` gets garbage collected after `doSomething()` returns.
+
+
 ## Technical Walkthrough
 
 ``` js
@@ -77,14 +120,14 @@ var requestFresh = stealthyRequire(require.cache, function () {
 
     // 2a. Before this callback gets called the require cache is cleared.
 
-	// 2b. Any require taking place here takes place on a clean require cache.
-	// Since the require call is part of the user's code it also works with module bundlers.
+    // 2b. Any require taking place here takes place on a clean require cache.
+    // Since the require call is part of the user's code it also works with module bundlers.
     return require('request');
-	// Anything returned here will be returned by stealthyRequire(...).
+    // Anything returned here will be returned by stealthyRequire(...).
 
-	// 2c. After this callback gets called the require cache is
-	// - cleared again and
-	// - restored to its old state before step 2.
+    // 2c. After this callback gets called the require cache is
+    // - cleared again and
+    // - restored to its old state before step 2.
 
 });
 
@@ -113,6 +156,9 @@ If you want to debug a test you should use `gulp test-without-coverage` to run a
 
 ## Change History
 
+- v1.1.0 (upcoming)
+    - Added section in README about a [potential memory leak](#preventing-a-memory-leak-when-repeatedly-requiring-fresh-module-instances-in-nodejs) *(Thanks to @Flarna and @novemberborn for bringing that up in [issue #2](https://github.com/analog-nico/stealthy-require/issues/2))*
+    - Performance optimizations *(Thanks to @jcready for [pull request #1](https://github.com/analog-nico/stealthy-require/pull/1))*
 - v1.0.0 (2016-07-18)
     - **Breaking Change:** API completely changed. Please read the [Usage section](#usage) again.
     - Redesigned library to support module bundlers like [Webpack](https://webpack.github.io) and [Browserify](http://browserify.org)
