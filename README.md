@@ -88,13 +88,13 @@ var stealthyRequire = require('stealthy-require');
 
 function doSomething() {
 
-    var lengthChildren = module.children.length;
+    var initialChildren = module.children.slice(); // Creates a shallow copy of the array
 
     var freshInstance = stealthyRequire(require.cache, function () {
         return require('some-module');
     });
 
-    module.children = module.children.slice(0, lengthChildren)
+    module.children = initialChildren;
 
     return freshInstance.calc();
 
