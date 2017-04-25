@@ -49,6 +49,22 @@ var requestFresh = stealthyRequire(require.cache, function () {
 
 The require cache is bypassed for the module you require (i.e. `request`) as well as all modules the module requires (i.e. `http` and many more).
 
+Sometimes the require cache shall not be bypassed for specific modules. E.g. `request` is required but `tough-cookie` – on which `request` depends on – shall be required using the regular cache. For that you can pass two extra arguments to `stealthyRequire(...)`:
+
+- A callback that requires the modules that shall be required without bypassing the cache
+- The `module` variable
+
+``` js
+var stealthyRequire = require('stealthy-require');
+
+var requestFresh = stealthyRequire(require.cache, function () {
+    return require('request');
+},
+function () {
+    require('tough-cookie'); // No return needed
+}, module);
+```
+
 ## Usage with Module Bundlers
 
 - [Webpack](https://webpack.github.io) works out-of-the-box like described in the [Usage section](#usage) above.
@@ -157,6 +173,7 @@ If you want to debug a test you should use `gulp test-without-coverage` to run a
 ## Change History
 
 - v1.1.0 (upcoming)
+    - Added ability to disable bypassing the cache for certain modules *(Thanks to @novemberborn for suggesting this in [issue #3](https://github.com/analog-nico/stealthy-require/issues/3))*
     - Added section in README about a [potential memory leak](#preventing-a-memory-leak-when-repeatedly-requiring-fresh-module-instances-in-nodejs) *(Thanks to @Flarna and @novemberborn for bringing that up in [issue #2](https://github.com/analog-nico/stealthy-require/issues/2))*
     - Performance optimizations *(Thanks to @jcready for [pull request #1](https://github.com/analog-nico/stealthy-require/pull/1))*
 - v1.0.0 (2016-07-18)
