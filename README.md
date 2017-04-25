@@ -62,6 +62,7 @@ var requestFresh = stealthyRequire(require.cache, function () {
 },
 function () {
     require('tough-cookie'); // No return needed
+    // You can require multiple modules here
 }, module);
 ```
 
