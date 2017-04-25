@@ -63,4 +63,32 @@ describe('When using Browserify, Stealthy-Require', function () {
 
     });
 
+    it('should allow Browserify to replace the require call for keeping modules (working for 6th argument as cache)', function (done) {
+
+        var b = browserify();
+        b.add(path.join(__dirname, '../fixtures/stealthy-require-and-keep-browserify.js'));
+        b.bundle()
+            .pipe(fs.createWriteStream(path.join(__dirname, '../results/browserify.keep.custom.bundle.js')))
+            .on('finish', function () {
+
+                var log = [];
+                var origConsoleLog = console.log;
+                console.log = function (text) {
+                    log.push(text);
+                };
+
+                require('../results/browserify.keep.custom.bundle.js');
+
+                console.log = origConsoleLog;
+
+                expect(log.length).to.eql(3);
+                expect(log[0]).to.eql(log[2]);
+                expect(log[0]).to.eql(log[1]);
+
+                done();
+
+            });
+
+    });
+
 });
