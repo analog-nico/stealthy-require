@@ -173,7 +173,7 @@ If you want to debug a test you should use `gulp test-without-coverage` to run a
 
 ## Change History
 
-- v1.1.0 (upcoming)
+- v1.1.0 (2017-04-25)
     - Added ability to disable bypassing the cache for certain modules *(Thanks to @novemberborn for suggesting this in [issue #3](https://github.com/analog-nico/stealthy-require/issues/3))*
     - Added section in README about a [potential memory leak](#preventing-a-memory-leak-when-repeatedly-requiring-fresh-module-instances-in-nodejs) *(Thanks to @Flarna and @novemberborn for bringing that up in [issue #2](https://github.com/analog-nico/stealthy-require/issues/2))*
     - Performance optimizations *(Thanks to @jcready for [pull request #1](https://github.com/analog-nico/stealthy-require/pull/1))*

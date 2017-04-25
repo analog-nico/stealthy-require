@@ -1,6 +1,6 @@
 {
   "name": "stealthy-require",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "The closest you can get to require something with bypassing the require cache",
   "keywords": [
     "require",
