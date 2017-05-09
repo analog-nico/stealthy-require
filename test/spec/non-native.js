@@ -99,4 +99,30 @@ describe('When only non-native modules are involved, Stealthy-Require', function
 
     });
 
+    it('should not pollute require cache with dependencies that should be kept but are never required', function () {
+
+        var testReq1 = require('../fixtures/sync-deps.js');
+        var testReq2 = require('../fixtures/no-deps.js');
+        delete require.cache[require.resolve('../fixtures/sync-deps.js')];
+        delete require.cache[require.resolve('../fixtures/no-deps.js')];
+        var testReq3 = require('../fixtures/sync-deps.js');
+        var testReq4 = require('../fixtures/no-deps.js');
+        expect(testReq1).to.not.eql(testReq3);
+        expect(testReq2).to.not.eql(testReq4);
+
+        delete require.cache[require.resolve('../fixtures/sync-deps.js')];
+        delete require.cache[require.resolve('../fixtures/no-deps.js')];
+
+        stealthyRequire(require.cache, function () {
+            return require('../fixtures/no-deps.js');
+        },
+        function () {
+            require('../fixtures/sync-deps.js');
+        }, module);
+
+        expect(require.cache[require.resolve('../fixtures/sync-deps.js')]).to.eql(undefined);
+        expect(require.cache.hasOwnProperty(require.resolve('../fixtures/sync-deps.js'))).to.eql(false); // eslint-disable-line no-prototype-builtins
+
+    });
+
 });
