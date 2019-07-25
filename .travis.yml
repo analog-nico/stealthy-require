@@ -26,7 +26,7 @@ matrix:
     - node_js: "10"
       env: V_BCRYPT=2.0.1 TRAVIS=travis CXX=g++-4.8
     - node_js: "12"
-      env: V_BCRYPT=2.0.1 TRAVIS=travis CXX=g++-4.8
+      env: V_BCRYPT=3.0.6 TRAVIS=travis CXX=g++-4.8
 
 before_install:
   - npm install bcrypt@$V_BCRYPT
