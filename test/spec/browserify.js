@@ -1,5 +1,8 @@
 'use strict';
 
+var chai = require('chai');
+var expect = chai.expect;
+
 var browserify = require('browserify');
 var fs = require('fs');
 var path = require('path');

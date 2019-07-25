@@ -1,5 +1,8 @@
 'use strict';
 
+var chai = require('chai');
+var expect = chai.expect;
+
 var path = require('path');
 var webpack = require('webpack');
 
