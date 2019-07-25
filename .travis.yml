@@ -9,30 +9,27 @@ addons:
       - gcc-4.8
       - g++-4.8
 
-env:
-  - TRAVIS=travis CXX=g++-4.8
-
 matrix:
   include:
     - node_js: "0.10"
-      env: V_BCRYPT=1.0.3
+      env: V_BCRYPT=1.0.3 TRAVIS=travis CXX=g++-4.8
     - node_js: "0.12"
-      env: V_BCRYPT=1.0.3
+      env: V_BCRYPT=1.0.3 TRAVIS=travis CXX=g++-4.8
     - node_js: "iojs"
-      env: V_BCRYPT=1.0.3
+      env: V_BCRYPT=1.0.3 TRAVIS=travis CXX=g++-4.8
     - node_js: "4"
-      env: V_BCRYPT=1.0.3
+      env: V_BCRYPT=1.0.3 TRAVIS=travis CXX=g++-4.8
     - node_js: "6"
-      env: V_BCRYPT=1.0.3
+      env: V_BCRYPT=1.0.3 TRAVIS=travis CXX=g++-4.8
     - node_js: "8"
-      env: V_BCRYPT=1.0.3
+      env: V_BCRYPT=1.0.3 TRAVIS=travis CXX=g++-4.8
     - node_js: "10"
-      env: V_BCRYPT=2.0.1
+      env: V_BCRYPT=2.0.1 TRAVIS=travis CXX=g++-4.8
     - node_js: "12"
-      env: V_BCRYPT=2.0.1
+      env: V_BCRYPT=2.0.1 TRAVIS=travis CXX=g++-4.8
 
 before_install:
-  - npm install bcrypt@V_BCRYPT
+  - npm install bcrypt@$V_BCRYPT
 
 install: npm install
 
