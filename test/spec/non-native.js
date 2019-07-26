@@ -120,11 +120,16 @@ describe('When only non-native modules are involved, Stealthy-Require', function
             return require('../fixtures/no-deps.js');
         },
         function () {
+
             require('../fixtures/sync-deps.js');
+
+            expect(require.cache[require.resolve('../fixtures/sync-deps.js')]).to.not.eql(undefined);
+            expect(Object.prototype.hasOwnProperty.call(require.cache, require.resolve('../fixtures/sync-deps.js'))).to.eql(true);
+
         }, module);
 
         expect(require.cache[require.resolve('../fixtures/sync-deps.js')]).to.eql(undefined);
-        expect(require.cache.hasOwnProperty(require.resolve('../fixtures/sync-deps.js'))).to.eql(false); // eslint-disable-line no-prototype-builtins
+        expect(Object.prototype.hasOwnProperty.call(require.cache, require.resolve('../fixtures/sync-deps.js'))).to.eql(false);
 
     });
 
