@@ -120,6 +120,7 @@ function doSomething() {
 
 The `slice` operation removes all new `module.children` entries created during the `stealthyRequire(...)` call and thus `freshInstance` gets garbage collected after `doSomething()` returns.
 
+There is the dedicated package [stealthy-require-no-leak](https://github.com/dword-design/stealthy-require-no-leak) that implements this adjustment.
 
 ## Technical Walkthrough
 
